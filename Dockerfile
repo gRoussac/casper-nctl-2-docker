@@ -51,7 +51,8 @@ RUN if [ -n "$BRANCH_SIDECAR" ]; then \
   ./compile.sh "/app/casper-node/utils/nctl" >> compile_output.txt; \
   fi
 RUN ./clean-build-artifacts.sh >> clean-build-artifacts.txt
-CMD ["/bin/bash", "-ci", "cat compile_output.txt"]
+
+# CMD ["/bin/bash", "-ci", "cat compile_output.txt"]
 
 FROM python:3-slim-bookworm as run
 
@@ -72,8 +73,7 @@ RUN "./setup.sh" >> setup_output.txt
 EXPOSE 11101-11105 14101-14105 18101-18105
 
 CMD if [ -n "$BRANCH_SIDECAR" ]; then \
-  ["/bin/bash", "-ci", "/app/restart.sh"] \
+  /bin/bash -ci "/app/restart.sh"; \
   else \
-  ["/bin/bash", "-ci", "/app/restart.sh", "/app/casper-node/utils/nctl"] \
+  /bin/bash -ci "/app/restart.sh /app/casper-node/utils/nctl"; \
   fi
-
