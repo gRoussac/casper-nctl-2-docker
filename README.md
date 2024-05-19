@@ -2,8 +2,6 @@
 
 Bundle nctl 2 in docker
 
-()
-
 # usage
 
 among `dev`/ `stable` / `2.0`
