@@ -1,0 +1,50 @@
+services:
+  casper-nctl-2-docker-stable:
+    image: casper-nctl-2-docker-stable:latest
+    container_name: casper-nctl-2-docker-stable
+    extends:
+      service: casper-nctl-2-docker
+      file: common-service.yml
+    profiles: ["stable"]
+    build:
+      args:
+        - BRANCH_NODE=release-1.5.6
+        - BRANCH_CLIENT=release-2.0.0
+
+  casper-nctl-2-docker-2.0:
+    image: casper-nctl-2-docker-2.0:latest
+    container_name: casper-nctl-2-docker-2.0
+    extends:
+      service: casper-nctl-2-docker
+      file: common-service.yml
+    profiles: ["2.0"]
+    build:
+      args:
+        - BRANCH_NODE=feat-2.0
+        - BRANCH_CLIENT=feat-track-node-2.0
+        - BRANCH_SIDECAR=feat-2.0
+
+  casper-nctl-2-docker-dev:
+    image: casper-nctl-2-docker-dev:latest
+    container_name: casper-nctl-2-docker-dev
+    extends:
+      service: casper-nctl-2-docker
+      file: common-service.yml
+    profiles: ["dev"]
+    build:
+      args:
+        - BRANCH_NODE=dev
+        - BRANCH_CLIENT=dev
+        - BRANCH_SIDECAR=dev
+
+  cors-anywhere:
+    container_name: cors-anywhere
+    profiles: ["cors-anywhere"]
+    build:
+      context: ./cors
+      dockerfile: cors-anywhere.Dockerfile
+    tty: true
+    environment:
+      PORT: 11100
+    ports:
+      - 11100:11100
