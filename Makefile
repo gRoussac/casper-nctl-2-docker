@@ -6,16 +6,16 @@ PROFILE ?= $(word 2,$(MAKECMDGOALS))
 PROFILE := $(if $(PROFILE),$(PROFILE),stable)
 
 build:
-	$(DEV_DC) --profile $(PROFILE) build
+	$(DEV_DC) --profile $(PROFILE) build --no-cache
+
+build-start-log: build
+	$(DEV_DC) --profile $(PROFILE) up --remove-orphans
 
 build-start: build
 	$(DEV_DC) --profile $(PROFILE) up --remove-orphans -d
 
 start:
 	$(DEV_DC) --profile $(PROFILE) up --remove-orphans -d
-
-build-start-log: build
-	$(DEV_DC) --profile $(PROFILE) up --remove-orphans
 
 stop:
 	$(DEV_DC) --profile $(PROFILE) down
