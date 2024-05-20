@@ -56,6 +56,9 @@ RUN ./clean-build-artifacts.sh >> clean-build-artifacts.txt
 
 FROM python:3-slim-bookworm as run
 
+ARG BRANCH_SIDECAR
+ENV BRANCH_SIDECAR=${BRANCH_SIDECAR}
+
 RUN apt-get update \
   && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
@@ -72,8 +75,9 @@ RUN "./setup.sh" >> setup_output.txt
 
 EXPOSE 11101-11105 14101-14105 18101-18105
 
-CMD if [ -n "$BRANCH_SIDECAR" ]; then \
-  /bin/bash -ci "/app/restart.sh"; \
+CMD ["/bin/bash", "-c", "\
+  if [ -n \"$BRANCH_SIDECAR\" ]; then \
+  /bin/bash -ci \"/app/restart.sh\"; \
   else \
-  /bin/bash -ci "/app/restart.sh /app/casper-node/utils/nctl"; \
-  fi
+  /bin/bash -ci \"/app/restart.sh /app/casper-node/utils/nctl\"; \
+  fi"]

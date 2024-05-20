@@ -35,7 +35,6 @@ services:
       args:
         - BRANCH_NODE=dev
         - BRANCH_CLIENT=dev
-        - BRANCH_SIDECAR=dev
 
   cors-anywhere:
     container_name: cors-anywhere
