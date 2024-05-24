@@ -34,23 +34,24 @@ RUN git clone -b main https://github.com/casper-network/casper-node-launcher.git
 RUN if [ -n "$BRANCH_SIDECAR" ]; then \
   git clone https://github.com/casper-network/casper-nctl.git ; \
   git clone -b $BRANCH_SIDECAR https://github.com/casper-network/casper-sidecar.git ; \
+  else \
+  mkdir -p casper-sidecar/target/release && mkdir casper-sidecar/resources ; \
+  touch casper-sidecar/target/release/casper-sidecar ; \
+  ln -s casper-node/utils/nctl casper-nctl ;\
   fi
 
 COPY sh/*.sh .
-
 RUN chmod +x ./*.sh
 
-ENV VIRTUAL_ENV=/app/casper-nctl/venv
-
+ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN ./setup-python.sh >> setup-python_output.txt
 
-RUN ./setup.sh >> setup_output1.txt
 RUN if [ -n "$BRANCH_SIDECAR" ]; then \
   ./compile.sh >> compile_output.txt; \
   else \
   ./compile.sh "/app/casper-node/utils/nctl" >> compile_output.txt; \
   fi
-RUN ./clean-build-artifacts.sh >> clean-build-artifacts.txt
 
 # CMD ["/bin/bash", "-ci", "cat compile_output.txt"]
 
@@ -65,15 +66,27 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY --from=build /app .
-
 COPY sh/*.sh .
-
 RUN chmod +x ./*.sh
 
-RUN "./setup.sh" >> setup_output.txt
+ENV VIRTUAL_ENV=/app/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN ./setup-python.sh >> setup-python_output.txt
 
-EXPOSE 11101-11105 14101-14105 18101-18105
+COPY --from=build /app/casper-node/resources ./casper-node/resources
+COPY --from=build /app/casper-node/target/release/casper-node ./casper-node/target/release/casper-node
+COPY --from=build /app/casper-client-rs/resources ./casper-client-rs/resources
+COPY --from=build /app/casper-client-rs/target/release/casper-client ./casper-client-rs/target/release/casper-client
+COPY --from=build /app/casper-node-launcher/resources ./casper-node-launcher/resources
+COPY --from=build /app/casper-node-launcher/target/release/casper-node-launcher ./casper-node-launcher/target/release/casper-node-launcher
+COPY --from=build /app/casper-sidecar/resources ./casper-sidecar/resources
+COPY --from=build /app/casper-sidecar/target/release/casper-sidecar ./casper-sidecar/target/release/casper-sidecar
+COPY --from=build /app/casper-nctl ./casper-nctl
+
+RUN if [ -z "$BRANCH_SIDECAR" ]; then \
+  mkdir -p ./casper-node/utils ; \
+  mv ./casper-nctl ./casper-node/utils/nctl ; \
+  fi
 
 CMD ["/bin/bash", "-c", "\
   if [ -n \"$BRANCH_SIDECAR\" ]; then \
@@ -81,3 +94,5 @@ CMD ["/bin/bash", "-c", "\
   else \
   /bin/bash -ci \"/app/restart.sh /app/casper-node/utils/nctl\"; \
   fi"]
+
+EXPOSE 11101-11105 14101-14105 18101-18105

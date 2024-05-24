@@ -6,6 +6,9 @@ PROFILE ?= $(word 2,$(MAKECMDGOALS))
 PROFILE := $(if $(PROFILE),$(PROFILE),stable)
 
 build:
+	$(DEV_DC) --profile $(PROFILE) build
+
+build-no-cache:
 	$(DEV_DC) --profile $(PROFILE) build --no-cache
 
 build-start-log: build
