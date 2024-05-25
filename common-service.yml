@@ -11,6 +11,7 @@ services:
       - 11101-11105:11101-11105
       - 14101-14105:14101-14105
       - 18101-18105:18101-18105
+      - 25101-25105:25101-25105
     volumes:
       - $PWD/assets/logs/stderr.log:/app/casper-nctl/assets/net-1/nodes/node-1/logs/stderr.log
       - $PWD/assets/logs/sidecar-stderr.log:/app/casper-nctl/assets/net-1/nodes/node-1/logs/sidecar-stderr.log
