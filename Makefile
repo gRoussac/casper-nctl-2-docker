@@ -11,7 +11,7 @@ build:
 build-no-cache:
 	$(DEV_DC) --profile $(PROFILE) build --no-cache
 
-build-start-log: build
+build-start-log: build-no-cache
 	$(DEV_DC) --profile $(PROFILE) up --remove-orphans
 
 build-start: build
@@ -19,6 +19,9 @@ build-start: build
 
 start:
 	$(DEV_DC) --profile $(PROFILE) up --remove-orphans -d
+
+start-log:
+	$(DEV_DC) --profile $(PROFILE) up --remove-orphans
 
 stop:
 	$(DEV_DC) --profile $(PROFILE) down
