@@ -86,6 +86,7 @@ COPY --from=build /app/casper-nctl ./casper-nctl
 RUN if [ -z "$BRANCH_SIDECAR" ]; then \
   mkdir -p ./casper-node/utils ; \
   mv ./casper-nctl ./casper-node/utils/nctl ; \
+  ln -s casper-node/utils/nctl casper-nctl ;\
   fi
 
 CMD ["/bin/bash", "-c", "\
