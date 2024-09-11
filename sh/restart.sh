@@ -10,6 +10,7 @@ else
     source /app/casper-nctl/activate
 fi
 
+sed -i 's/^allow_request_speculative_exec = false/allow_request_speculative_exec = true/' ./casper-node/resources/local/config.toml
 nctl-assets-setup
 find $NCTL/assets/ -name 'secret_key.pem' -exec chmod go+r {} \;
 nctl-start
