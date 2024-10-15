@@ -96,4 +96,4 @@ CMD ["/bin/bash", "-c", "\
   /bin/bash -ci \"/app/restart.sh /app/casper-node/utils/nctl\"; \
   fi"]
 
-EXPOSE 11101-11105 14101-14105 18101-18105 25101-25105
+EXPOSE 11101-11105 14101-14105 18101-18105 25101-25105 28101-28105

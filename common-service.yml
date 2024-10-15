@@ -5,7 +5,7 @@ services:
     build:
       dockerfile: ./Dockerfile
       args:
-        BRANCH_NODE: release-1.5.7
+        BRANCH_NODE: release-1.5.8
         BRANCH_CLIENT: release-2.0.0
     ports:
       - 11101-11105:11101-11105
@@ -18,3 +18,4 @@ services:
       - $PWD/assets/logs/sidecar-stderr.log:/app/casper-nctl/assets/net-1/nodes/node-1/logs/sidecar-stderr.log
       - $PWD/assets/faucet:/app/casper-nctl/assets/net-1/faucet/
       - $PWD/assets/users:/app/casper-nctl/assets/net-1/users/
+      - $PWD/assets/chainspec:/app/casper-nctl/assets/net-1/chainspec/
