@@ -1,6 +1,5 @@
 .git
-.github
-.github_credentials
+.github*
 .cursor
 assets
 *.md
